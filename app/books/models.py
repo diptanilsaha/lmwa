@@ -141,8 +141,15 @@ class Book(db.Model):
     def total_stocks(self):
         return len(self.stocks)
     
+    def have_author(self, author: str | Author):
+        if type(author) == str:
+            author = db.session.get(Author, author)
+
+        return author in self.authors
+    
     def add_author(self, author: Author):
-        self.authors.append(author)
+        if not self.have_author(author):
+            self.authors.append(author)
 
     @staticmethod
     def find_or_create_book(book_data: BookData):
