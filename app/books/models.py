@@ -26,7 +26,7 @@ book_author_table = Table(
     "book_author_table",
     db.metadata,
     Column("book_id", ForeignKey("book.id", ondelete="CASCADE"), primary_key=True),
-    Column("author_id", ForeignKey("author.id", ondelete="CASCADE"), primary_key=True)
+    Column("author_id", ForeignKey("author.name", ondelete="CASCADE"), primary_key=True)
 )
 
 class Author(db.Model):
@@ -48,7 +48,6 @@ class Author(db.Model):
         
         author = Author(name=author_name)
         db.session.add(author)
-        db.session.commit()
         return author
     
 class Publisher(db.Model):
@@ -68,7 +67,6 @@ class Publisher(db.Model):
         
         publisher = Publisher(name=publisher_name)
         db.session.add(publisher)
-        db.session.commit()
         return publisher
     
 class Language(db.Model):
@@ -88,7 +86,6 @@ class Language(db.Model):
         
         language = Language(code=lang_code)
         db.session.add(language)
-        db.session.commit()
         return language
 
 class BookData(TypedDict):
@@ -169,7 +166,7 @@ class Book(db.Model):
         book.language = Language.find_or_create_language(lang_code=book_data["language_code"])
         book.publisher = Publisher.find_or_create_publisher(publisher_name=book_data["publisher"])
 
-        book.id = book_data['bookID']
+        book.id = int(book_data['bookID'])
         book.title = book_data['title']
         book.isbn = book_data['isbn']
         book.isbn13 = book_data['isbn13']
@@ -186,7 +183,6 @@ class Book(db.Model):
             book.add_author(author)
 
         db.session.add(book)
-        db.session.commit()
         return book
 
 class StockStatus(enum.Enum):
