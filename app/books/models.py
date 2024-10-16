@@ -25,8 +25,8 @@ from app.utils import strip_dict_keys
 book_author_table = Table(
     "book_author_table",
     db.metadata,
-    Column("book_id", ForeignKey("book.id"), primary_key=True),
-    Column("author_id", ForeignKey("author.id"), primary_key=True)
+    Column("book_id", ForeignKey("book.id", ondelete="CASCADE"), primary_key=True),
+    Column("author_id", ForeignKey("author.id", ondelete="CASCADE"), primary_key=True)
 )
 
 class Author(db.Model):
@@ -189,7 +189,7 @@ class StockStatus(enum.Enum):
 class BookStock(db.Model):
     __tablename__ = "book_stock"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    book_id: Mapped[int] = mapped_column(ForeignKey("book.id"), primary_key=True)
+    book_id: Mapped[int] = mapped_column(ForeignKey("book.id", ondelete="CASCADE"), primary_key=True)
     book: Mapped["Book"] = relationship(back_populates="stocks")
     status: Mapped[StockStatus] = mapped_column(
         sqlalchemy.Enum(StockStatus),
