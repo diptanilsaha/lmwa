@@ -75,9 +75,7 @@ class BookTransaction(db.Model):
             try:
                 Transaction.create_transaction(self, due_paid)
                 self.stock.status = StockStatus.AVAILABLE
-            except ValueError as e:
-                return False
-            except TypeError as e:
+            except:
                 return False
         return True
     
