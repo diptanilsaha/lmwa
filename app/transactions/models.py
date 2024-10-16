@@ -19,8 +19,8 @@ from config import Config
 class BookTransaction(db.Model):
     __tablename__ = "book_transaction"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    stock_id: Mapped[int] = mapped_column(ForeignKey("book_stock.id", ondelete="CASCADE"), primary_key=True)
-    member_id: Mapped[int] = mapped_column(ForeignKey("member.id", ondelete="CASCADE"), primary_key=True)
+    stock_id: Mapped[int] = mapped_column(ForeignKey("book_stock.id", ondelete="CASCADE"))
+    member_id: Mapped[int] = mapped_column(ForeignKey("member.id", ondelete="CASCADE"))
     issue_date: Mapped[datetime.date] = mapped_column(Date)
     due_date: Mapped[datetime.date] = mapped_column(Date)
     transaction: Mapped["Transaction"] = relationship(back_populates="book_transaction")
