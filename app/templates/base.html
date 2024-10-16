@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}"></link>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="{{ url_for('static', filename='js/bootstrap/bootstrap.bundle.min.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/htmx/htmx.min.js') }}" defer></script>
     <title>{% block title %}{% endblock %}</title>
@@ -32,6 +33,17 @@
         </div>
     </nav>
     <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <!-- category: primary->blue, success->green, warning->yellow and danger->red -->
         {% block content %}{% endblock %}
     </main>
 </body>
