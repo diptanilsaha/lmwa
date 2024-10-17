@@ -11,7 +11,6 @@ from sqlalchemy.orm import (
     relationship
 )
 from app.db import db
-from app.transactions.models import BookTransaction, TransactionStatus
 from config import Config
 
 class Member(db.Model):
@@ -60,4 +59,4 @@ class Member(db.Model):
 
         return len(members) == 0
     
-    
+from app.transactions.models import BookTransaction    

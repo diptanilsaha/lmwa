@@ -19,7 +19,6 @@ from sqlalchemy.orm import (
     relationship
 )
 from app.db import db
-from app.transactions.models import BookTransaction
 from app.utils import strip_dict_keys
 
 book_author_table = Table(
@@ -31,7 +30,7 @@ book_author_table = Table(
 
 class Author(db.Model):
     __tablename__ = "author"
-    name: Mapped[str] = mapped_column(String(50))
+    name: Mapped[str] = mapped_column(String(50), primary_key=True)
     books: Mapped[List["Book"]] = relationship(
         secondary=book_author_table, back_populates="authors"
     )
@@ -224,3 +223,5 @@ class BookStock(db.Model):
             return False # if exception occurs
         
         return True
+    
+from app.transactions.models import BookTransaction

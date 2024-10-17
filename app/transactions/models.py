@@ -12,7 +12,6 @@ from sqlalchemy.orm import (
     relationship
 )
 from app.db import db
-from app.books.models import BookStock, StockStatus
 from app.members.models import Member
 from config import Config
 
@@ -142,3 +141,5 @@ class Transaction(db.Model):
 
     def pay_due(self):
         self.status = TransactionStatus.PAID
+
+from app.books.models import BookStock, StockStatus
