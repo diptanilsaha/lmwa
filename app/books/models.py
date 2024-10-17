@@ -192,7 +192,7 @@ class StockStatus(enum.Enum):
 class BookStock(db.Model):
     __tablename__ = "book_stock"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    book_id: Mapped[int] = mapped_column(ForeignKey("book.id", ondelete="CASCADE"), primary_key=True)
+    book_id: Mapped[int] = mapped_column(ForeignKey("book.id", ondelete="CASCADE"))
     book: Mapped["Book"] = relationship(back_populates="stocks")
     status: Mapped[StockStatus] = mapped_column(
         sqlalchemy.Enum(StockStatus),
@@ -207,10 +207,8 @@ class BookStock(db.Model):
         return f'<BookStock {self.id}>'
     
     @staticmethod
-    def create_stock(stock_id: int, book: Book):
-        book_stock: BookStock = db.session.get(
-            BookStock, (stock_id, book.id)
-        )
+    def create_stock(stock_id: int, book_id: int):
+        book_stock: BookStock = db.session.get(BookStock, stock_id)
         
         if book_stock is not None:
             return None # if already created.
@@ -218,7 +216,7 @@ class BookStock(db.Model):
         try:
             book_stock = BookStock(
                 id=stock_id,
-                book=book
+                book_id=book_id
             )
             db.session.add(book_stock)
             db.session.commit()

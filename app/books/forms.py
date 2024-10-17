@@ -86,17 +86,13 @@ class BookStockForm(FlaskForm):
     book_id = IntegerField('Book ID', validators=[DataRequired(), NumberRange(min=1)])
 
     def validate_id(form, field):
-        book_stock: BookStock = db.session.execute(
-            db.select(BookStock).filter_by(id=field.data)
-        ).scalar_one_or_none()
+        book_stock: BookStock = db.session.get(BookStock, field.data)
 
-        if book_stock and book_stock.book_id == form.book_id.data:
-            raise ValidationError('Stock with same Stock Id and Book Id already exists.')
+        if book_stock is not None:
+            raise ValidationError(f"Stock with Stock ID '{field.data}' exists.")
         
     def validate_book_id(form, field):
-        book_stock: BookStock = db.session.execute(
-            db.select(BookStock).filter_by(book_id=field.data)
-        ).scalar_one_or_none()
+        book: Book = db.session.get(Book, field.data)
 
-        if book_stock and book_stock.id == form.id.data:
-            raise ValidationError('Stock with same Book Id and Stock Id already exists.')
+        if book is None:
+            raise ValidationError(f"No book with Book ID - '{field.data}' exists.")
