@@ -24,8 +24,8 @@ class BookTransaction(db.Model):
     due_date: Mapped[datetime.date] = mapped_column(Date)
     transaction: Mapped["Transaction"] = relationship(back_populates="book_transaction")
 
-    stock: Mapped["BookStock"] = relationship(back_populates="members_rented")
-    member: Mapped["Member"] = relationship(back_populates="books_rented")
+    stock: Mapped["BookStock"] = relationship(back_populates="transactions")
+    member: Mapped["Member"] = relationship(back_populates="transactions")
 
     def __repr__(self):
         return f'<BookTransaction {self.id}>'

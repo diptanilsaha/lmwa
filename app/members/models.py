@@ -20,8 +20,8 @@ class Member(db.Model):
     email: Mapped[str] = mapped_column(String(256), unique=True)
     joining_date: Mapped[datetime.date] = mapped_column(Date)
 
-    books_rented: Mapped[List["BookTransaction"]] = relationship(
-        back_populates="members_rented"
+    transactions: Mapped[List["BookTransaction"]] = relationship(
+        "BookTransaction", back_populates="member"
     )
 
     @property
@@ -57,6 +57,4 @@ class Member(db.Model):
     def validate_email(self, email):
         members = db.session.execute(db.select(Member).filter_by(email=email)).scalars()
 
-        return len(members) == 0
-    
-from app.transactions.models import BookTransaction    
+        return len(members) == 0 

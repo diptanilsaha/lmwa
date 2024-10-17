@@ -198,8 +198,8 @@ class BookStock(db.Model):
         default=StockStatus.AVAILABLE
     )
 
-    members_rented: Mapped[List["BookTransaction"]] = relationship(
-        back_populates="books_rented"
+    transactions: Mapped[List["BookTransaction"]] = relationship(
+        "BookTransaction", back_populates="stock"
     )
 
     def __repr__(self):
