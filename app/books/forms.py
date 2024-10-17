@@ -5,7 +5,8 @@ from wtforms import (
     IntegerField,
     DateField,
     DecimalField,
-    FieldList
+    FieldList,
+    SelectField
 )
 from wtforms.validators import DataRequired, Length, NumberRange
 from wtforms.validators import ValidationError
@@ -96,3 +97,11 @@ class BookStockForm(FlaskForm):
 
         if book is None:
             raise ValidationError(f"No book with Book ID - '{field.data}' exists.")
+
+class BookSearchForm(FlaskForm):
+    search_by = SelectField(
+        'Search by',
+        validators=[DataRequired()],
+        choices=[('', 'Search By'), ('title', 'Book Name'), ('author', 'Author')]
+    )
+    search_term = StringField('Search term', validators=[DataRequired()])
