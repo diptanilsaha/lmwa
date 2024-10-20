@@ -22,10 +22,10 @@ class BookTransaction(db.Model):
     member_id: Mapped[int] = mapped_column(ForeignKey("member.id", ondelete="CASCADE"))
     issue_date: Mapped[datetime.date] = mapped_column(Date)
     due_date: Mapped[datetime.date] = mapped_column(Date)
-    transaction: Mapped["Transaction"] = relationship(back_populates="book_transaction")
+    transaction: Mapped["Transaction"] = relationship(back_populates="book_transaction", lazy="select")
 
-    stock: Mapped["BookStock"] = relationship(back_populates="transactions")
-    member: Mapped["Member"] = relationship(back_populates="transactions")
+    stock: Mapped["BookStock"] = relationship(back_populates="transactions", lazy="select")
+    member: Mapped["Member"] = relationship(back_populates="transactions", lazy="select")
 
     def __repr__(self):
         return f'<BookTransaction {self.id}>'
@@ -90,7 +90,6 @@ class BookTransaction(db.Model):
     def pay_due(self):
         if not self.is_due_paid:
             self.transaction.pay_due()
-            db.session.commit()
 
 class TransactionStatus(enum.Enum):
     PAID = "paid"
@@ -101,7 +100,7 @@ class Transaction(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     book_trans_id: Mapped[int] = mapped_column(ForeignKey("book_transaction.id", ondelete="CASCADE"))
     book_transaction: Mapped["BookTransaction"] = relationship(
-        back_populates="transaction"
+        back_populates="transaction", lazy="select"
     )
     return_date: Mapped[datetime.date] = mapped_column(Date)
     extra_days: Mapped[int] = mapped_column(Integer)
@@ -137,7 +136,6 @@ class Transaction(db.Model):
             transaction.pay_due()
 
         db.session.add(transaction)
-        db.session.commit()
 
     def pay_due(self):
         self.status = TransactionStatus.PAID
