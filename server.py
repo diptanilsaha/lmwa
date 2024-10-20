@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, redirect, url_for
 from config import Config
 from app.db import db, migrate
 from app.books.base import books_bp
@@ -36,7 +36,7 @@ def create_app(debug: bool = False, config_class: Config = Config) -> Flask:
 
     @app.route('/')
     def index():
-        return render_template('base.html')
+        return redirect(url_for('books.books'))
 
     return app
 
