@@ -27,7 +27,7 @@ class Member(db.Model):
     @property
     def no_of_books_currently_rented(self):
         count = 0
-        for book in self.books_rented:
+        for book in self.transactions:
             if not book.is_returned:
                 count += 1
         return count
@@ -35,7 +35,7 @@ class Member(db.Model):
     @property
     def total_dues(self):
         dues = 0
-        for book in self.books_rented:
+        for book in self.transactions:
             if not book.is_due_paid:
                 dues += book.total_rent
         return dues
@@ -46,7 +46,7 @@ class Member(db.Model):
             and self.total_dues < Config.PERMITTED_AMOUNT_OF_DUES
     
     def pay_all_dues(self):
-        for book in self.books_rented:
+        for book in self.transactions:
             if not book.is_due_paid:
                 book.pay_due()
         db.session.commit()
