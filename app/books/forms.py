@@ -105,7 +105,6 @@ class BookForm(FlaskForm):
     
 class BookStockForm(FlaskForm):
     id = IntegerField('Stock ID', validators=[DataRequired(), NumberRange(min=1)])
-    book_id = IntegerField('Book ID', validators=[DataRequired(), NumberRange(min=1)])
 
     def validate_id(form, field):
         book_stock: BookStock = db.session.get(BookStock, field.data)
@@ -113,11 +112,6 @@ class BookStockForm(FlaskForm):
         if book_stock is not None:
             raise ValidationError(f"Stock with Stock ID '{field.data}' exists.")
         
-    def validate_book_id(form, field):
-        book: Book = db.session.get(Book, field.data)
-
-        if book is None:
-            raise ValidationError(f"No book with Book ID - '{field.data}' exists.")
 
 class BookSearchForm(FlaskForm):
     class Meta:

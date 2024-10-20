@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% set active_page = 'books' %}
+
+{% block content %}
+<div class="w-75 mx-auto mb-4">
+    <h2 class="mb-4">Add Stock for '{{ book.title }}'</h2>
+    <form action="" method="post">
+        {{ form.csrf_token }}
+        <div class="row g-3">
+            <div class="col-12">
+                {{ form.id.label(class_="form-label") }}
+                {% if not form.id.errors %}
+                {{ form.id(class_="form-control") }}
+                {% else %}
+                {{ form.id(class_="form-control is-invalid") }}
+                {% for error in form.id.errors %}
+                <div class="invalid-feedback">
+                    {{ error }}
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-12">
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary me-2">Submit</button>
+                    <button type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
