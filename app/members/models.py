@@ -21,7 +21,9 @@ class Member(db.Model):
     joining_date: Mapped[datetime.date] = mapped_column(Date)
 
     transactions: Mapped[List["BookTransaction"]] = relationship(
-        "BookTransaction", back_populates="member"
+        "BookTransaction", 
+        back_populates="member",
+        cascade="all, delete-orphan"
     )
 
     @property

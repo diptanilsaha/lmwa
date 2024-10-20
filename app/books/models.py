@@ -112,7 +112,11 @@ class Book(db.Model):
     )
     ratings_count: Mapped[int] = mapped_column(Integer)
     text_reviews_count: Mapped[int] = mapped_column(Integer)
-    stocks: Mapped[List["BookStock"]] = relationship(back_populates="book", lazy="select")
+    stocks: Mapped[List["BookStock"]] = relationship(
+        back_populates="book", 
+        lazy="select",
+        cascade="all, delete-orphan"
+    )
     
     @property
     def is_available(self):
@@ -190,8 +194,11 @@ class BookStock(db.Model):
     )
 
     transactions: Mapped[List["BookTransaction"]] = relationship(
-        "BookTransaction", back_populates="stock"
+        "BookTransaction", 
+        back_populates="stock",
+        cascade="all, delete-orphan"
     )
+    created_on: Mapped[datetime.date] = mapped_column(Date)
     
     @staticmethod
     def create_stock(stock_id: int, book_id: int):

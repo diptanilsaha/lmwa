@@ -23,7 +23,11 @@ class BookTransaction(db.Model):
     member_id: Mapped[int] = mapped_column(ForeignKey("member.id", ondelete="CASCADE"))
     issue_date: Mapped[datetime.date] = mapped_column(Date)
     due_date: Mapped[datetime.date] = mapped_column(Date)
-    transaction: Mapped["Transaction"] = relationship(back_populates="book_transaction", lazy="select")
+    transaction: Mapped["Transaction"] = relationship(
+        back_populates="book_transaction", 
+        lazy="select",
+        cascade="all, delete-orphan"
+    )
 
     stock: Mapped["BookStock"] = relationship(back_populates="transactions", lazy="select")
     member: Mapped["Member"] = relationship(back_populates="transactions", lazy="select")
