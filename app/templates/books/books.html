@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center">
+    <h2 class="mb-0">Books</h2>
+    <a href="{{ url_for('books.add_book') }}" class="btn btn-success">Add books</a>
+</div>
+<hr>
+
+<div class="mb-3">
+    <form action="" method="get">   
+        <div class="row g-2">
+            <div class="col-2">
+                {{ form.search_by(class_="form-select") }}
+            </div>
+            <div class="col-9">
+                {{ form.search_term(class_="form-control", placeholder="Search Term") }}
+            </div>
+            <div class="col-1">
+                <button type="submit" class="btn btn-primary btn-block">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if not books|length %}
+<div class="p-4 text-center">
+    <p class="lead">No data found.</p>
+</div>
+{% else %}
+<table class="table table-striped-columns">
+    <thead>
+        <tr>
+            <th scope="col">BookID</th>
+            <th scope="col">Title</th>
+            <th scope="col">Authors</th>
+            <th scope="col">ISBN-10</th>
+            <th scope="col">ISBN-13</th>
+            <th scope="col">Language</th>
+            <th scope="col">Publication Date</th>
+            <th scope="col">Publisher</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+            {% for i in range(0, book.authors|length) %}
+                {% if i == 0 %}
+                <tr>
+                    <td rowspan="{{ book.authors|length }}"><a href="{{ url_for('books.book_view', id=book.id) }}">{{ book.id }}</a></td>
+                    <td rowspan="{{ book.authors|length }}">{{ book.title }}</td>
+                    <td>{{ book.authors[i].name }}</td>
+                    <td rowspan="{{ book.authors|length }}">{{ book.isbn }}</td>
+                    <td rowspan="{{ book.authors|length }}">{{ book.isbn13 }}</td>
+                    <td rowspan="{{ book.authors|length }}">{{ book.language_code }}</td>
+                    <td rowspan="{{ book.authors|length }}">{{ book.publication_date.strftime('%Y-%m-%d') }}</td>
+                    <td rowspan="{{ book.authors|length }}">{{ book.publisher_name }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td>{{ book.authors[i].name }}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}

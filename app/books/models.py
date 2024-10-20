@@ -32,11 +32,8 @@ class Author(db.Model):
     __tablename__ = "author"
     name: Mapped[str] = mapped_column(String(50), primary_key=True)
     books: Mapped[List["Book"]] = relationship(
-        secondary=book_author_table, back_populates="authors"
+        secondary=book_author_table, back_populates="authors", lazy="select"
     )
-
-    def __repr__(self):
-        return f'<Author {self.name}>'
     
     @staticmethod
     def find_or_create_author(author_name: str):
@@ -52,10 +49,7 @@ class Author(db.Model):
 class Publisher(db.Model):
     __tablename__ = "publisher"
     name: Mapped[str] = mapped_column(String(50), primary_key=True)
-    books: Mapped[List["Book"]] = relationship(back_populates="publisher")
-
-    def __repr__(self):
-        return f'<Publisher {self.name}>'
+    books: Mapped[List["Book"]] = relationship(back_populates="publisher", lazy="select")
     
     @staticmethod
     def find_or_create_publisher(publisher_name: str):
@@ -70,11 +64,8 @@ class Publisher(db.Model):
     
 class Language(db.Model):
     __tablename__ = "language"
-    code: Mapped[str] = mapped_column(String(3), primary_key=True)
-    books: Mapped[List["Book"]] = relationship(back_populates="language")
-
-    def __repr__(self):
-        return f'<Language {self.code}>'
+    code: Mapped[str] = mapped_column(String(10), primary_key=True)
+    books: Mapped[List["Book"]] = relationship(back_populates="language", lazy="select")
 
     @staticmethod
     def find_or_create_language(lang_code: str):
@@ -108,23 +99,20 @@ class Book(db.Model):
     isbn: Mapped[str] = mapped_column(String(10))
     isbn13: Mapped[str] = mapped_column(String(13))
     language_code: Mapped[str] = mapped_column(ForeignKey("language.code"))
-    language: Mapped["Language"] = relationship(back_populates="books")
+    language: Mapped["Language"] = relationship(back_populates="books", lazy="select")
     num_pages: Mapped[int] = mapped_column(Integer)
     publication_date: Mapped[datetime.date] = mapped_column(Date)
     publisher_name: Mapped[str] = mapped_column(ForeignKey("publisher.name"))
-    publisher: Mapped["Publisher"] = relationship(back_populates="books")
+    publisher: Mapped["Publisher"] = relationship(back_populates="books", lazy="select")
     authors: Mapped[List["Author"]] = relationship(
-        secondary=book_author_table, back_populates="books"
+        secondary=book_author_table, back_populates="books", lazy="select"
     )
     average_rating: Mapped[decimal.Decimal] = mapped_column(
         Numeric(precision=3, scale=2)
     )
     ratings_count: Mapped[int] = mapped_column(Integer)
     text_reviews_count: Mapped[int] = mapped_column(Integer)
-    stocks: Mapped[List["BookStock"]] = relationship(back_populates="book")
-
-    def __repr__(self):
-        return f'<Book {self.id}>'
+    stocks: Mapped[List["BookStock"]] = relationship(back_populates="book", lazy="select")
     
     @property
     def is_available(self):
@@ -162,8 +150,11 @@ class Book(db.Model):
                 author_name=author_name
             )
             authors.append(author)
-        book.language = Language.find_or_create_language(lang_code=book_data["language_code"])
-        book.publisher = Publisher.find_or_create_publisher(publisher_name=book_data["publisher"])
+        language = Language.find_or_create_language(lang_code=book_data["language_code"])
+        book.language_code = language.code
+
+        publisher = Publisher.find_or_create_publisher(publisher_name=book_data["publisher"])
+        book.publisher_name = publisher.name
 
         book.id = int(book_data['bookID'])
         book.title = book_data['title']
@@ -201,9 +192,6 @@ class BookStock(db.Model):
     transactions: Mapped[List["BookTransaction"]] = relationship(
         "BookTransaction", back_populates="stock"
     )
-
-    def __repr__(self):
-        return f'<BookStock {self.id}>'
     
     @staticmethod
     def create_stock(stock_id: int, book_id: int):
