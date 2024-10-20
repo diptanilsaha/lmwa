@@ -127,6 +127,9 @@ class Transaction(db.Model):
         if type(book_trans) != BookTransaction:
             raise TypeError("'book_trans' can be only a BookTransaction object.")
         
+        if book_trans.is_returned:
+            return
+        
         transaction = Transaction()
         transaction.book_transaction = book_trans
 
@@ -141,6 +144,7 @@ class Transaction(db.Model):
             transaction.pay_due()
 
         db.session.add(transaction)
+        return transaction
 
     def pay_due(self):
         self.status = TransactionStatus.PAID
