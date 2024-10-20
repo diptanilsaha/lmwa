@@ -21,13 +21,13 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav ms-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Books</a>
+                        <a class="nav-link {{ 'active' if active_page == 'books' }}" href="{{ url_for('books.books') }}">Books</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Members</a>
+                        <a class="nav-link {{ 'active' if active_page == 'members' }}" href="#">Members</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Transactions</a>
+                        <a class="nav-link {{ 'active' if active_page == 'transactions' }}" href="#">Transactions</a>
                     </li>
                 </ul>
             </div>
