@@ -1,6 +1,7 @@
 import enum
 import datetime
 import sqlalchemy
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy import (
     Integer,
     ForeignKey,
@@ -34,7 +35,7 @@ class BookTransaction(db.Model):
         self.issue_date = issue_date
         self.due_date = issue_date + datetime.timedelta(days=Config.LOAN_PERIOD)
     
-    @property
+    @hybrid_property
     def is_returned(self):
         return self.transaction is not None and self.stock.status == StockStatus.AVAILABLE
     
@@ -53,7 +54,7 @@ class BookTransaction(db.Model):
     @property
     def extra_days(self):
         if not self.is_returned:
-            extra = datetime.datetime.today() - self.due_date
+            extra = datetime.date.today() - self.due_date
             return extra.days
         return self.transaction.extra_days
     
@@ -125,7 +126,7 @@ class Transaction(db.Model):
         transaction = Transaction()
         transaction.book_transaction = book_trans
 
-        transaction.return_date = datetime.datetime.today()
+        transaction.return_date = datetime.date.today()
         transaction.extra_days = book_trans.extra_days
 
         transaction.total_fine = book_trans.total_fine

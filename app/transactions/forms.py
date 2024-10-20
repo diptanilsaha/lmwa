@@ -1,5 +1,6 @@
+import datetime
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, EmailField
+from wtforms import IntegerField, EmailField, SelectField, DateField
 from wtforms.validators import DataRequired, NumberRange, Email
 from wtforms.validators import ValidationError
 from app.db import db
@@ -28,3 +29,34 @@ class BookIssueForm(FlaskForm):
         
         if not member.is_allowed_to_rent_book:
             raise ValidationError('Member is not allowed to rent book.')
+        
+class TransactionFilterForm(FlaskForm):
+    class Meta:
+        csrf = False
+
+    issue_return_due = SelectField(
+        'Issue/Due/Return',
+        validators=[DataRequired()],
+        choices=[
+            ('', 'Select'),
+            ('issue', 'Issue Date'),
+            ('due', 'Due Date'),
+            ('return', 'Return Date')
+        ]
+    )
+    from_date = DateField('From Date', validators=[DataRequired()])
+    to_date = DateField('To Date', validators=[DataRequired()])
+
+    def validate_from_date(form, field):
+        if field.data > form.to_date.data:
+            raise ValidationError('From Date can\'t be greater than To Date.')
+        
+        if field.data > datetime.date.today():
+            raise ValidationError('From Date can\'t be in future.')
+        
+    def validate_to_date(form, field):
+        if field.data < form.from_date.data:
+            raise ValidationError('To Date can\'t be lesser than From Date.')
+        
+        if field.data > datetime.date.today():
+            raise ValidationError('To Date can\'t be in future.')
