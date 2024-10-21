@@ -35,13 +35,34 @@ class BookTransaction(db.Model):
     def __repr__(self):
         return f'<BookTransaction {self.id}>'
     
+    @staticmethod
+    def issue_book(stock_id: int, member_email: str):
+        stock: BookStock = db.session.get(BookStock, stock_id)
+        if stock.status == StockStatus.TAKEN:
+            return None
+        
+        member: Member = db.session.execute(
+            db.select(Member).filter_by(email=member_email)
+        ).scalar_one()
+        if not member.is_allowed_to_rent_book:
+            return None
+
+        book_transaction: BookTransaction = BookTransaction(
+            stock = stock,
+            member_id = member.id
+        )
+        book_transaction.set_issue_and_due_date(datetime.date.today())
+        book_transaction.stock.status = StockStatus.TAKEN
+        db.session.add(book_transaction)
+        return book_transaction
+    
     def set_issue_and_due_date(self, issue_date: datetime.date):
         self.issue_date = issue_date
         self.due_date = issue_date + datetime.timedelta(days=Config.LOAN_PERIOD)
     
     @hybrid_property
     def is_returned(self):
-        return self.transaction is not None and self.stock.status == StockStatus.AVAILABLE
+        return self.transaction is not None
     
     @property
     def loan_period(self):
@@ -59,6 +80,8 @@ class BookTransaction(db.Model):
     def extra_days(self):
         if not self.is_returned:
             extra = datetime.date.today() - self.due_date
+            if extra.days < 0:
+                return 0
             return extra.days
         return self.transaction.extra_days
     
@@ -76,25 +99,26 @@ class BookTransaction(db.Model):
 
     def return_book(self, due_paid: bool = False):
         if not self.is_returned:
-            try:
-                Transaction.create_transaction(self, due_paid)
-                self.stock.status = StockStatus.AVAILABLE
-            except:
+            transaction: Transaction = Transaction.create_transaction(self, due_paid)
+            if not transaction:
                 return False
-        return True
+            self.stock.status = StockStatus.AVAILABLE
+            return True
+        return False
     
     def return_book_and_due_paid(self):
         self.return_book(due_paid=True)
 
     @property
     def is_due_paid(self):
-        if self.transaction is None:
-            return False
-        return self.transaction.status == TransactionStatus.PAID
+        return self.is_returned and self.transaction.status == TransactionStatus.PAID
     
     def pay_due(self):
+        if not self.is_returned:
+            return False
         if not self.is_due_paid:
             self.transaction.pay_due()
+            return True
 
 class TransactionStatus(enum.Enum):
     PAID = "paid"
@@ -127,18 +151,16 @@ class Transaction(db.Model):
         if type(book_trans) != BookTransaction:
             raise TypeError("'book_trans' can be only a BookTransaction object.")
         
-        if book_trans.is_returned:
+        if book_trans.transaction:
             return
         
-        transaction = Transaction()
-        transaction.book_transaction = book_trans
-
-        transaction.return_date = datetime.date.today()
-        transaction.extra_days = book_trans.extra_days
-
-        transaction.total_fine = book_trans.total_fine
-
-        transaction.total_rent = book_trans.total_rent
+        transaction = Transaction(
+            book_trans_id = book_trans.id,
+            return_date = datetime.date.today(),
+            extra_days = book_trans.extra_days,
+            total_fine = book_trans.total_fine,
+            total_rent = book_trans.total_rent
+        )
 
         if due_paid:
             transaction.pay_due()

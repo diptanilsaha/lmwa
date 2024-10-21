@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% set active_page = 'transactions' %}
+
+{% block content %}
+<div class="w-75 mx-auto mb-4">
+    <h2 class="mb-4">Search and Issue Book</h2>
+    <form action="{{ action_url }}" method="post">
+        {{ form.csrf_token }}
+        <div class="row g-3">
+            <div class="col-6">
+                {{ form.stock_id.label(class_="form-label") }}
+                {% if not form.stock_id.errors %}
+                {{ form.stock_id(class_="form-control", readonly=confirm) }}
+                {% else %}
+                {{ form.stock_id(class_="form-control is-invalid", readonly=confirm) }}
+                {% for error in form.stock_id.errors %}
+                <div class="invalid-feedback">
+                    {{ error }}
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-6">
+                {{ form.member_email.label(class_="form-label") }}
+                {% if not form.member_email.errors %}
+                {{ form.member_email(class_="form-control", readonly=confirm) }}
+                {% else %}
+                {{ form.member_email(class_="form-control is-invalid", readonly=confirm) }}
+                {% for error in form.member_email.errors %}
+                <div class="invalid-feedback">
+                    {{ error }}
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            {% if book_stock is defined %}
+            <div class="col-12">
+                <div class="border border-dark rounded py-3 px-4 bg-body-tertiary">
+                    <h3 class="mt-0">Book</h3>
+                    <hr>
+                    <div class="row g-1">
+                        <div class="col-6">
+                            <p class="lead"><strong>Book Title</strong></p>
+                        </div>
+                        <div class="col-6">
+                            <p class="lead">{{ book_stock.book.title }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="lead"><strong>Stock ID/Book ID</strong></p>
+                        </div>
+                        <div class="col-6">
+                            <p class="lead">
+                                <a href="{{ url_for('books.stock', bid=book_stock.book_id, sid=book_stock.id) }}">{{ book_stock.id }}</a> / 
+                                <a href="{{ url_for('books.book_view', id=book_stock.book_id) }}">{{ book_stock.book_id }}</a>
+                            </p>
+                        </div>
+                        <div class="col-6">
+                            <p class="lead"><strong>Current status</strong></p>
+                        </div>
+                        <div class="col-6">
+                            <p class="lead">
+                                {{ book_stock.status.value|capitalize }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if member is defined %}
+            <div class="col-12">
+                <div class="border border-dark rounded py-3 px-4 bg-body-tertiary">
+                    <h3 class="mt-0">Member</h3>
+                    <hr>
+                    <div class="row g-1">
+                        <div class="col-6">
+                            <p class="lead"><strong>Member Name</strong></p>
+                        </div>
+                        <div class="col-6">
+                            <p class="lead">{{ member.name }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="lead"><strong>Member Email Address</strong></p>
+                        </div>
+                        <div class="col-6">
+                            <p class="lead">
+                                <a href="{{ url_for('members.member_view', id=member.id) }}">{{ member.email }}</a>
+                            </p>
+                        </div>
+                        <div class="col-6">
+                            <p class="lead"><strong>Current status</strong></p>
+                        </div>
+                        <div class="col-6">
+                            <p class="lead">
+                                {% if member.is_allowed_to_rent_book %}
+                                Allowed to Rent Book.
+                                {% else %}
+                                {% if member.total_dues >= 500 %}
+                                Outstanding debt of {{ member.total_dues }}.
+                                {% else %}
+                                Maximum number of books rented.
+                                {% endif %}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="col-12">
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary me-2">{{ 'Confirm' if confirm else 'Search' }}</button>
+                    {% if confirm %}
+                    <a href="{{ url_for('transactions.issue_book') }}" class="btn btn-secondary">Cancel</a>
+                    {% else %}
+                    <button type="reset" class="btn btn-secondary">Reset</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

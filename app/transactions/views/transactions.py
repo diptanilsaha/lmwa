@@ -15,12 +15,10 @@ def transactions():
             transactions: List[BookTransaction] = db.session.execute(
                 db.select(BookTransaction)
                 .where(
-                    and_(
-                        between(
-                            BookTransaction.issue_date,
-                            form.from_date.data,
-                            form.to_date.data
-                        )
+                    between(
+                        BookTransaction.issue_date,
+                        form.from_date.data,
+                        form.to_date.data
                     )
                 )
                 .order_by(BookTransaction.issue_date.desc())
@@ -29,12 +27,10 @@ def transactions():
             transactions: List[BookTransaction] = db.session.execute(
                 db.select(BookTransaction)
                 .where(
-                    and_(
-                        between(
-                            BookTransaction.due_date,
-                            form.from_date.data,
-                            form.to_date.data
-                        )
+                    between(
+                        BookTransaction.due_date,
+                        form.from_date.data,
+                        form.to_date.data
                     )
                 )
                 .order_by(BookTransaction.issue_date.desc())
@@ -44,12 +40,10 @@ def transactions():
                 db.select(BookTransaction)
                 .join(Transaction)
                 .where(
-                    and_(
-                        between(
-                            Transaction.return_date,
-                            form.from_date.data,
-                            form.to_date.data
-                        )
+                    between(
+                        Transaction.return_date,
+                        form.from_date.data,
+                        form.to_date.data
                     )
                 )
                 .order_by(Transaction.return_date.desc())
