@@ -111,7 +111,9 @@ class BookTransaction(db.Model):
 
     @property
     def is_due_paid(self):
-        return self.is_returned and self.transaction.status == TransactionStatus.PAID
+        if not self.is_returned:
+            return None
+        return self.transaction.status == TransactionStatus.PAID
     
     def pay_due(self):
         if not self.is_returned:

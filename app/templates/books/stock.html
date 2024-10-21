@@ -6,9 +6,6 @@
 <div class="d-flex justify-content-between align-items-center">
     <h2 class="mb-0">Book Stock: "{{ book_stock.book.title }}"</h2>
     <div class="d-flex">
-        {% if book_stock.status.value == 'available' %}
-        <a href="{{ url_for('transactions.issue_book', stock_id=book_stock.id) }}" class="btn btn-warning me-2">Issue this stock</a>
-        {% endif %}
         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteBook">
             Delete
         </button>
@@ -31,7 +28,7 @@
         </div>
     </div>
     <div class="col-7">
-        <p class="lead">{{ book_stock.book_id }}</p>
+        <p class="lead"><a href="{{ url_for('books.book_view', id=book_stock.book_id) }}">{{ book_stock.book_id }}</a></p>
     </div>
     <div class="col-5">
         <div class="w-75 ms-auto">
@@ -59,7 +56,7 @@
         <p class="lead text-center">No transactions.</p>
     </div>
     {% else %}
-    <table class="table table-stripped-column">
+    <table class="table table-striped-columns">
         <thead>
             <tr>
                 <th scope="col">Transaction ID</th>

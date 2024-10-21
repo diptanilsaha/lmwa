@@ -37,6 +37,7 @@
             <th scope="col">Name</th>
             <th scope="col">Email Address</th>
             <th scope="col">Date of Joining</th>
+            <th scope="col">Debt</th>
         </tr>
     </thead>
     <tbody>
@@ -46,6 +47,7 @@
             <td>{{ member.name }}</td>
             <td>{{ member.email }}</td>
             <td>{{ member.joining_date }}</td>
+            <td>₹ {{ member.total_dues }}</td>
         </tr>
         {% endfor %}
     </tbody>

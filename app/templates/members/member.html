@@ -68,7 +68,7 @@
         <p class="lead text-center">No transactions.</p>
     </div>
     {% else %}
-    <table class="table table-stripped-column">
+    <table class="table table-striped-columns">
         <thead>
             <tr>
                 <th scope="col">Transaction ID</th>
@@ -133,6 +133,7 @@
     </div>
 </div>
 
+{% if member.total_dues %}
 <div class="modal fade" id="clearMemberAllDues" tabindex="-1" aria-labelledby="clearMemberAllDues" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -141,7 +142,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Do you want to clear all dues of this member?
+                Do you want to clear debt of Member - {{ member.id }}? The amount of debt is <strong>₹ {{ member.total_dues }}</strong>
             </div>
             <form action="#" method="post">
                 <div class="modal-footer">
@@ -152,4 +153,5 @@
         </div>
     </div>
 </div>
+{% endif %}
 {% endblock %}
