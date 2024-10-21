@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% set active_page = 'books' %}
+
+{% block content %}
+<h2 class="mb-0">Import Books</h2>
+<hr>
+
+<div class="mb-3">
+    <form action="{{ action_url }}" method="post"> 
+        {{ form.csrf_token }}  
+        <div class="row g-3">
+            <div class="col-3">
+                {{ form.no_of_books(class_="form-control", placeholder="Number of Entries", readonly=confirm) }}
+            </div>
+            <div class="col-9">
+                {{ form.title(class_="form-control", placeholder="Book Title", readonly=confirm) }}
+            </div>
+            <div class="col-12">
+                <div class="d-flex justify-content-center align-items-center">
+                    <button type="submit" class="btn btn-primary btn-block me-2">{{ 'Confirm Import' if confirm else 'Search' }}</button>
+                    {% if confirm %}
+                    <a href="{{ url_for('books.import_books') }}" class="btn btn-secondary btn-block">Cancel Import</a>
+                    {% else %}
+                    <button type="reset" class="btn btn-secondary btn-block">Reset</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if books_data is defined %}
+<div class="my-4">
+    <h4>Books Imported ({{ books_data|length }})</h4>
+
+    <table class="table table-striped-columns">
+        <thead>
+            <tr>
+                <th scope="col">BookID</th>
+                <th scope="col">Title</th>
+                <th scope="col">Authors</th>
+                <th scope="col">Average Ratings</th>
+                <th scope="col">ISBN-10</th>
+                <th scope="col">ISBN-13</th>
+                <th scope="col">Language</th>
+                <th scope="col">Publication Date</th>
+                <th scope="col">Publisher</th>
+                <th scope="col">Ratings Count</th>
+                <th scope="col">Text Reviews Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books_data %}
+            <tr>
+                <td>{{ book['bookID'] }}</a></td>
+                <td>{{ book['title'] }}</td>
+                <td>{{ book['authors']}}</td>
+                <td>{{ book['average_rating'] }}</td>
+                <td>{{ book['isbn'] }}</td>
+                <td>{{ book['isbn13'] }}</td>
+                <td>{{ book['language_code'] }}</td>
+                <td>{{ book['publication_date'] }}</td>
+                <td>{{ book['publisher'] }}</td>
+                <td>{{ book['ratings_count'] }}</td>
+                <td>{{ book['text_reviews_count'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}

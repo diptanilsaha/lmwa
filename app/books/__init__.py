@@ -6,6 +6,7 @@ from .views import (
     delete_book,
     delete_stock,
     edit_book,
+    import_books,
     stock
 )
 
@@ -17,5 +18,6 @@ __all__ = [
     "delete_book",
     "delete_stock",
     "edit_book",
+    "import_books",
     "stock"
 ]

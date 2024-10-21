@@ -123,3 +123,7 @@ class BookSearchForm(FlaskForm):
         choices=[('', 'Search By'), ('title', 'Book Name'), ('author', 'Author')]
     )
     search_term = StringField('Search term', validators=[DataRequired()])
+
+class ImportBookForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    no_of_books = IntegerField('No. of Books', validators=[DataRequired(), NumberRange(min=1)])
