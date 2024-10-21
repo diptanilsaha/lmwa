@@ -15,7 +15,7 @@
 <div class="mb-3">
     <form action="" method="get">   
         <div class="row g-2">
-            <div class="col-2">
+            <div class="col-4">
                 {{ form.issue_return_due.label(class_="form-label") }}
                 {{ form.issue_return_due(class_="form-select") }}
             </div>
@@ -27,10 +27,10 @@
                 {{ form.to_date.label(class_="form-label") }}
                 {{ form.to_date(class_="form-control") }}
             </div>
-            <div class="col-2">
-                <div class="d-flex flex-column">
-                    <a href="{{ url_for('transactions.transactions') }}" class="btn btn-secondary mb-1">Clear</a>
-                    <button type="submit" class="btn btn-primary btn-block">Search</button>
+            <div class="col-12">
+                <div class="d-flex justify-content-center align-items-center">
+                    <button type="submit" class="btn btn-primary btn-block me-2">Search</button>
+                    <a href="{{ url_for('transactions.transactions') }}" class="btn btn-secondary">Clear</a>
                 </div>
             </div>
         </div>
