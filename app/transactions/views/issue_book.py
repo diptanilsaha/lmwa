@@ -33,8 +33,6 @@ def confirm_issue_book():
             db.session.commit()
             flash(f'"{book_transaction.stock.book.title}" rented to {book_transaction.member.name}.', 'success')
             return redirect(url_for('transactions.transaction', id=book_transaction.id))
-        else:
-            print(form.errors)
         
     form: BookIssueForm = BookIssueForm(request.args)
         
