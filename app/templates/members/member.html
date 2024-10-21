@@ -6,9 +6,11 @@
 <div class="d-flex justify-content-between align-items-center">
     <h2 class="mb-0">Member - {{ member.id }}</h2>
     <div class="d-flex">
+        {% if member.total_dues %}
         <button type="button" class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#clearMemberAllDues">
             Clear all dues
         </button>
+        {% endif %}
         <a href="{{ url_for('members.edit_member', id=member.id) }}" class="btn btn-outline-primary me-2">Edit</a>
         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteMember">
             Delete
