@@ -10,8 +10,9 @@ def delete_book(id: int):
 
     if not book.book_safe_to_delete:
         flash(f"Book ID - {book_id} cannot be deleted as stocks are rented.", "danger")
-    else:
-        db.session.delete(book)
-        db.session.commit()
-        flash(f"Book ID - {book_id} deleted successfully.", "success")
+        return redirect(url_for('books.book_view', id=book_id))
+
+    db.session.delete(book)
+    db.session.commit()
+    flash(f"Book ID - {book_id} deleted successfully.", "success")
     return redirect(url_for('books.books'))

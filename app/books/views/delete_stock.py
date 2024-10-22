@@ -24,8 +24,9 @@ def delete_stock(bid: int, sid :int):
 
     if book_stock.status == StockStatus.TAKEN:
         flash(f"Stock ID - {stock_id} is currently rented.", "danger")
-    else:    
-        db.session.delete(book_stock)
-        db.session.commit()
-        flash(f"Stock ID - {stock_id} deleted successfully.", "success")
+        return redirect(url_for('books.stock', bid=book_id, sid=stock_id))
+
+    db.session.delete(book_stock)
+    db.session.commit()
+    flash(f"Stock ID - {stock_id} deleted successfully.", "success")
     return redirect(url_for('books.book_view', id=book_id))
