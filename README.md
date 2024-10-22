@@ -28,93 +28,93 @@ $ ./install.sh
 ### Screenshots  
 
 <figure>
-    <img src="screenshots/books.png" alt="Books">
     <figcaption>Books</figcaption>
+    <img src="screenshots/books.png" alt="Books">
 </figure>
 
 <figure>
-    <img src="screenshots/import_books.png" alt="Import Books">
     <figcaption>Import Books</figcaption>
+    <img src="screenshots/import_books.png" alt="Import Books">
 </figure>
 
 <figure>
-    <img src="screenshots/confirm_import_books.png" alt="Confirm Import Books">
     <figcaption>Confirm Import Books</figcaption>
+    <img src="screenshots/confirm_import_books.png" alt="Confirm Import Books">
 </figure>
 
 <figure>
-    <img src="screenshots/book_details.png" alt="Book details">
     <figcaption>Book details</figcaption>
+    <img src="screenshots/book_details.png" alt="Book details">
 </figure>
 
 <figure>
-    <img src="screenshots/book_delete.png" alt="Book details">
     <figcaption>Delete Book</figcaption>
+    <img src="screenshots/book_delete.png" alt="Book details">
 </figure>
 
 <figure>
-    <img src="screenshots/book_add_stock.png" alt="Add Book Stock">
     <figcaption>Add Book Stock</figcaption>
+    <img src="screenshots/book_add_stock.png" alt="Add Book Stock">
 </figure>
 
 <figure>
-    <img src="screenshots/edit_book.png" alt="Edit Book details">
     <figcaption>Edit Book details</figcaption>
+    <img src="screenshots/edit_book.png" alt="Edit Book details">
 </figure>
 
 <figure>
-    <img src="screenshots/members.png" alt="Members">
     <figcaption>Members</figcaption>
+    <img src="screenshots/members.png" alt="Members">
 </figure>
 
 <figure>
-    <img src="screenshots/member_add.png" alt="Add Member">
     <figcaption>Add Member</figcaption>
+    <img src="screenshots/member_add.png" alt="Add Member">
 </figure>
 
 <figure>
-    <img src="screenshots/member_details.png" alt="Member details">
     <figcaption>Member Details</figcaption>
+    <img src="screenshots/member_details.png" alt="Member details">
 </figure>
 
 <figure>
-    <img src="screenshots/transactions.png" alt="Transactions">
     <figcaption>Transactions</figcaption>
+    <img src="screenshots/transactions.png" alt="Transactions">
 </figure>
 
 <figure>
-    <img src="screenshots/transaction_search_and_issue_book.png" alt="Search and Issue Book">
     <figcaption>Search and Issue Book</figcaption>
+    <img src="screenshots/transaction_search_and_issue_book.png" alt="Search and Issue Book">
 </figure>
 
 <figure>
-    <img src="screenshots/transaction_confirm_book_issue.png" alt="Confirm Book Issue">
     <figcaption>Confirm Book Issue</figcaption>
+    <img src="screenshots/transaction_confirm_book_issue.png" alt="Confirm Book Issue">
 </figure>
 
 <figure>
-    <img src="screenshots/transaction_book_issue.png" alt="Issued Book Transaction Details">
     <figcaption>Issued Book Transaction Details</figcaption>
+    <img src="screenshots/transaction_book_issue.png" alt="Issued Book Transaction Details">
 </figure>
 
 <figure>
-    <img src="screenshots/return_book.png" alt="Return Book">
     <figcaption>Return Book</figcaption>
+    <img src="screenshots/return_book.png" alt="Return Book">
 </figure>
 
 <figure>
-    <img src="screenshots/return_book_and_pay_rent.png" alt="Return Book and Pay Rent">
     <figcaption>Return Book and Pay Rent</figcaption>
+    <img src="screenshots/return_book_and_pay_rent.png" alt="Return Book and Pay Rent">
 </figure>
 
 <figure>
-    <img src="screenshots/returned_book_rent_not_paid.png" alt="Book returned but Rent not paid">
     <figcaption>Book returned but Rent not paid</figcaption>
+    <img src="screenshots/returned_book_rent_not_paid.png" alt="Book returned but Rent not paid">
 </figure>
 
 <figure>
-    <img src="screenshots/rent_collect.png" alt="Collect Rent for Returned Book">
     <figcaption>Collect Rent for Returned Book</figcaption>
+    <img src="screenshots/rent_collect.png" alt="Collect Rent for Returned Book">
 </figure>
 
 ---
