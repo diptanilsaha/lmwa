@@ -1,6 +1,6 @@
 # Library Management Web Application
 
-A Web Application for Librarians to manage their library.
+A Web Application for Librarians to manage their library, built using Python (Flask).
 
 ### Features  
 
