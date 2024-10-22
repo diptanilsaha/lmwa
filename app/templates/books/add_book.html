@@ -159,12 +159,12 @@
             </div>
             <div id="authors">
                 {% for author in form.authors %}
-                <div class="author col-12">
+                <div class="author col-12" id="author-{{ loop.index }}">
                     {{ author.form.name.label(class_="form-label") }}
                     <div class="d-flex">
                         {% if not author.errors %}
                         {{ author.form.name(class_="form-control me-2") }}
-                        <button type="button" class="btn btn-danger" id="delete-authors-0">Delete</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteAuthor(0)">Delete</button>
                         {% else %}
                         {{ author.form.name(class_="form-control is-invalid") }}
                         {% for error in author.errors %}
@@ -203,17 +203,36 @@
             let newAuthorId = `authors-${authorsCount}-name`
             authors.insertAdjacentHTML(
                 'beforeend',
-                `<div class="author col-12">
+                `<div class="author col-12" id="author-${authorsCount}">
                     <label class="form-label" for="${newAuthorId}">Author Name</label>
                     <div class="d-flex">
                         
                         <input class="form-control me-2" id="${newAuthorId}" maxlength="50" minlength="1" name="${newAuthorId}" required="" type="text" value="">
-                        <button type="button" class="btn btn-danger" id="delete-${authorsCount}">Delete</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteAuthor(${authorsCount})">Delete</button>
                         
                     </div>
                 </div>`
             )
         })
+    }
+
+    const deleteAuthor = (author) => {
+        const authors = document.getElementById('authors');
+        const authorsCount = authors.getElementsByClassName('author').length;
+
+        if (authorsCount === 1) {
+            alert('Author cannot be empty. Atleast one author is required.')
+            return;
+        }
+
+        for (i = author+1; i < authorsCount; i++) {
+            let authorName = document.getElementById(`authors-${i}-name`).value;
+            document.getElementById(`authors-${i-1}-name`).value = authorName;
+        }
+
+        const lastAuthor = authors.querySelector(`#author-${authorsCount-1}`);
+
+        authors.removeChild(lastAuthor);
     }
 </script>
 {% endblock %}
