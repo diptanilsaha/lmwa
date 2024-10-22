@@ -120,10 +120,20 @@ class Book(db.Model):
     
     @property
     def is_available(self):
-        for stock in self.stocks:
-            if stock.status == StockStatus.TAKEN:
-                return False
+        if self.stocks:
+            for stock in self.stocks:
+                if stock.status == StockStatus.AVAILABLE:
+                    return True
+        return False
+    
+    @property
+    def book_safe_to_delete(self):
+        if self.stocks:
+            for stock in self.stocks:
+                if stock.status == StockStatus.TAKEN:
+                    return False
         return True
+
     
     @property
     def total_stocks(self):

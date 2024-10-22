@@ -71,7 +71,7 @@
         <tbody>
             {% for transaction in book_stock.transactions %}
             <tr>
-                <td>{{ transaction.id }}</td>
+                <td><a href="{{ url_for('transactions.transaction', id=transaction.id)}}">{{ transaction.id }}</a></td>
                 <td><a href="{{ url_for('members.member_view', id=transaction.member_id) }}" target="_blank">{{ transaction.member_id }}</a></td>
                 <td>{{ transaction.member.name }}</td>
                 <td>{{ transaction.issue_date }}</td>
