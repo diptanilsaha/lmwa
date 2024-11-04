@@ -4,6 +4,7 @@ import datetime
 from typing import List
 from typing import TypedDict
 from sqlalchemy import (
+    and_,
     Integer,
     String,
     ForeignKey,
@@ -209,24 +210,38 @@ class BookStock(db.Model):
         cascade="all, delete-orphan"
     )
     created_on: Mapped[datetime.date] = mapped_column(Date)
+
+    @staticmethod
+    def find_stock(stock_id: int, book_id: int):
+        book_stock: BookStock = db.session.execute(
+            db.select(BookStock)
+            .where(
+                and_(
+                    BookStock.id == stock_id,
+                    BookStock.book_id == book_id
+                )
+            )
+        ).scalar_one_or_none()
+
+        return book_stock
     
     @staticmethod
     def create_stock(stock_id: int, book_id: int):
-        book_stock: BookStock = db.session.get(BookStock, stock_id)
+        book_stock: BookStock = BookStock.find_stock(stock_id, book_id)
         
-        if book_stock is not None:
+        if book_stock:
             return None # if already created.
         
         try:
             book_stock = BookStock(
                 id=stock_id,
-                book_id=book_id
+                book_id=book_id,
+                created_on=datetime.date.today()
             )
             db.session.add(book_stock)
-            db.session.commit()
         except:
-            return False # if exception occurs
+            return None # if exception occurs
         
-        return True
+        return book_stock
     
 from app.transactions.models import BookTransaction

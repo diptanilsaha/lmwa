@@ -4,17 +4,9 @@ from app.db import db
 from app.books.models import BookStock, StockStatus
 from app.books.base import books_bp
 
-@books_bp.route('/<int:bid>/<int:sid>/delete', methods=['POST'])
+@books_bp.route('/<int:bid>/DeleteStock/<int:sid>', methods=['POST'])
 def delete_stock(bid: int, sid :int):
-    book_stock: BookStock = db.session.execute(
-        db.select(BookStock)
-        .where(
-            and_(
-                BookStock.id == sid,
-                BookStock.book_id == bid
-            )
-        )
-    ).scalar_one_or_none()
+    book_stock: BookStock = BookStock.find_stock(stock_id=sid, book_id=bid)
 
     if not book_stock:
         abort(404)
